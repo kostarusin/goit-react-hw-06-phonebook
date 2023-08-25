@@ -1,23 +1,27 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 import style from './ContactForm.module.css';
+import { useDispatch, useSelector } from 'react-redux';
 
 const ContactForm = ({ onAddContact }) => {
-  const [contact, setContact] = useState({
-    name: '',
-    number: '',
-  });
+  const contact = useSelector(store => store.contactsActions.contact);
+  const dispatch = useDispatch();
 
   const handleChange = event => {
     const { name, value } = event.target;
-    setContact(prevContact => ({ ...prevContact, [name]: value }));
+    dispatch({
+      type: 'contactsActions/handleChange',
+      payload: { name, value },
+    });
   };
 
   const handleSubmit = event => {
     event.preventDefault();
     const { name, number } = contact;
     onAddContact(name, number);
-    setContact({ name: '', number: '' });
+    dispatch({
+      type: 'contactsActions/onAddContact',
+      payload: { name: '', number: '' },
+    });
   };
 
   const { name, number } = contact;

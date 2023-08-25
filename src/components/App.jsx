@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import ContactForm from './ContactForm';
 import Filter from './Filter';
 import ContactList from './ContactList';
 import { nanoid } from 'nanoid';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const App = () => {
-  const [contacts, setContacts] = useState(() => {
-    return JSON.parse(localStorage.getItem('contacts')) ?? [];
-  });
-  const [filter, setFilter] = useState('');
+  const contacts = useSelector(store => store.contactsActions.contacts);
+  const filter = useSelector(store => store.contactsActions.filter);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     localStorage.setItem('contacts', JSON.stringify(contacts));
@@ -24,17 +24,18 @@ export const App = () => {
       return;
     }
     const newContact = { id: nanoid(), name, number };
-    setContacts(prevContacts => [...prevContacts, newContact]);
+    dispatch({ type: 'contactsActions/newContact', payload: newContact });
   };
 
   const deleteContact = id => {
-    setContacts(prevContacts =>
-      prevContacts.filter(contact => contact.id !== id)
-    );
+    dispatch({ type: 'contactsActions/deleteContact', payload: id });
   };
 
   const handleFilter = event => {
-    setFilter(event.currentTarget.value);
+    dispatch({
+      type: 'contactsActions/handleFilter',
+      payload: event.currentTarget.value,
+    });
   };
 
   const getFilteredContacts = () => {
