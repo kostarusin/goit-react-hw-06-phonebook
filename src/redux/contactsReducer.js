@@ -1,3 +1,5 @@
+import { createSlice } from '@reduxjs/toolkit';
+
 const initialState = {
   contacts: JSON.parse(localStorage.getItem('contacts')) ?? [],
   filter: '',
@@ -7,42 +9,40 @@ const initialState = {
   },
 };
 
-export const contactsReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case 'contactsActions/newContact': {
-      return { ...state, contacts: [...state.contacts, action.payload] };
-    }
-    case 'contactsActions/deleteContact': {
-      return {
-        ...state,
-        contacts: state.contacts.filter(
-          contact => contact.id !== action.payload
-        ),
-      };
-    }
-    case 'contactsActions/handleFilter': {
-      return {
-        ...state,
-        filter: action.payload,
-      };
-    }
-    case 'contactsActions/handleChange': {
-      return {
-        ...state,
-        contact: {
-          ...state.contact,
-          [action.payload.name]: action.payload.value,
-        },
-      };
-    }
-    case 'contactsActions/onAddContact': {
-      return {
-        ...state,
-        contact: action.payload,
-      };
-    }
+const contactsActionsSlice = createSlice({
+  name: 'contactsActions',
+  initialState,
 
-    default:
-      return state;
-  }
-};
+  reducers: {
+    setAddNewContact: (state, { payload }) => {
+      state.contacts = [...state.contacts, payload];
+    },
+
+    setDeleteContact: (state, { payload }) => {
+      state.contacts = state.contacts.filter(contact => contact.id !== payload);
+    },
+
+    setContactFilter: (state, { payload }) => {
+      state.filter = payload;
+    },
+
+    setContactEnter: (state, { payload }) => {
+      state.contact = { ...state.contact, [payload.name]: payload.value };
+    },
+
+    setInputEmpty: (state, { payload }) => {
+      state.contact = payload;
+    },
+  },
+});
+
+export const {
+  setAddNewContact,
+  setDeleteContact,
+  setContactFilter,
+  setContactEnter,
+  setInputEmpty,
+  setLocalStorage,
+} = contactsActionsSlice.actions;
+
+export const contactsReducer = contactsActionsSlice.reducer;

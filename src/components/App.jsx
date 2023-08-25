@@ -4,6 +4,11 @@ import Filter from './Filter';
 import ContactList from './ContactList';
 import { nanoid } from 'nanoid';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+  setAddNewContact,
+  setDeleteContact,
+  setContactFilter,
+} from 'redux/contactsReducer';
 
 export const App = () => {
   const contacts = useSelector(store => store.contactsActions.contacts);
@@ -24,18 +29,16 @@ export const App = () => {
       return;
     }
     const newContact = { id: nanoid(), name, number };
-    dispatch({ type: 'contactsActions/newContact', payload: newContact });
+
+    dispatch(setAddNewContact(newContact));
   };
 
   const deleteContact = id => {
-    dispatch({ type: 'contactsActions/deleteContact', payload: id });
+    dispatch(setDeleteContact(id));
   };
 
   const handleFilter = event => {
-    dispatch({
-      type: 'contactsActions/handleFilter',
-      payload: event.currentTarget.value,
-    });
+    dispatch(setContactFilter(event.currentTarget.value));
   };
 
   const getFilteredContacts = () => {

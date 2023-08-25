@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import style from './ContactForm.module.css';
 import { useDispatch, useSelector } from 'react-redux';
+import { setContactEnter, setInputEmpty } from 'redux/contactsReducer';
 
 const ContactForm = ({ onAddContact }) => {
   const contact = useSelector(store => store.contactsActions.contact);
@@ -8,20 +9,14 @@ const ContactForm = ({ onAddContact }) => {
 
   const handleChange = event => {
     const { name, value } = event.target;
-    dispatch({
-      type: 'contactsActions/handleChange',
-      payload: { name, value },
-    });
+    dispatch(setContactEnter({ name, value }));
   };
 
   const handleSubmit = event => {
     event.preventDefault();
     const { name, number } = contact;
     onAddContact(name, number);
-    dispatch({
-      type: 'contactsActions/onAddContact',
-      payload: { name: '', number: '' },
-    });
+    dispatch(setInputEmpty({ name: '', number: '' }));
   };
 
   const { name, number } = contact;
