@@ -1,22 +1,23 @@
 import PropTypes from 'prop-types';
 import style from './ContactForm.module.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { setContactEnter, setInputEmpty } from 'redux/contactsReducer';
+import { useState } from 'react';
 
 const ContactForm = ({ onAddContact }) => {
-  const contact = useSelector(store => store.contactsActions.contact);
-  const dispatch = useDispatch();
+  const [contact, setContact] = useState({
+    name: '',
+    number: '',
+  });
 
   const handleChange = event => {
     const { name, value } = event.target;
-    dispatch(setContactEnter({ name, value }));
+    setContact(prevContact => ({ ...prevContact, [name]: value }));
   };
 
   const handleSubmit = event => {
     event.preventDefault();
     const { name, number } = contact;
     onAddContact(name, number);
-    dispatch(setInputEmpty({ name: '', number: '' }));
+    setContact({ name: '', number: '' });
   };
 
   const { name, number } = contact;
