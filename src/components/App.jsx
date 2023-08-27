@@ -1,23 +1,20 @@
-import { useEffect } from 'react';
+import { nanoid } from 'nanoid';
 import ContactForm from './ContactForm';
 import Filter from './Filter';
 import ContactList from './ContactList';
-import { nanoid } from 'nanoid';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   setAddNewContact,
   setDeleteContact,
   setContactFilter,
+  getContacts,
+  getFilter,
 } from 'redux/contactsReducer';
 
 export const App = () => {
-  const contacts = useSelector(store => store.contactsActions.contacts);
-  const filter = useSelector(store => store.contactsActions.filter);
+  const contacts = useSelector(getContacts);
+  const filter = useSelector(getFilter);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
 
   const addContact = (name, number) => {
     const contactExists = contacts.some(
