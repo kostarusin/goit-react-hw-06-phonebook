@@ -72,7 +72,7 @@ const ContactForm = () => {
         </label>
 
         <button className={style.formButton} type="submit">
-          Add contact
+          Add contact 
         </button>
       </form>
     </div>
